@@ -41,7 +41,7 @@ export default function UploadZone({ onUploaded }: Props) {
       onDragOver={e => { e.preventDefault(); setDragging(true) }}
       onDragLeave={() => setDragging(false)}
       onDrop={onDrop}
-      className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragging ? 'border-blue-400 bg-blue-400/10' : 'border-slate-600 hover:border-slate-500'}`}>
+      className={`border-2 border-dashed rounded-xl p-5 sm:p-8 text-center transition-all ${dragging ? 'border-blue-400 bg-blue-400/10' : 'border-slate-600 hover:border-slate-500'}`}>
       {uploading ? (
         <div className="space-y-3">
           <Loader2 className="w-10 h-10 text-blue-400 animate-spin mx-auto" />

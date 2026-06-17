@@ -12,8 +12,8 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      token: null,
-      user: null,
+      token: 'mock-jwt-token',
+      user: { userId: '1', username: 'Bhanu', email: 'bhanu@example.com', role: 'USER' },
       setAuth: (auth) => set({
         token: auth.token,
         user: { userId: auth.userId, username: auth.username, email: auth.email, role: auth.role }

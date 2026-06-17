@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { Bot, MessageSquare } from 'lucide-react'
+import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
+import { Bot, MessageSquare, Menu } from 'lucide-react'
+import { LayoutContextType } from '../components/layout/Layout'
 import { useChatStore } from '../store/chatStore'
 import { chatService } from '../services/chatService'
 import { Message, SourceReference } from '../types'
@@ -12,6 +13,7 @@ export default function ChatPage() {
   const { conversationId } = useParams()
   const navigate = useNavigate()
   const bottomRef = useRef<HTMLDivElement>(null)
+  const { toggleSidebar } = useOutletContext<LayoutContextType>()
   const {
     messages, setMessages, addMessage, appendStreamChunk, streamingContent,
     isStreaming, setStreaming, setSources, sources, activeConversationId, setActiveConversation
@@ -142,27 +144,32 @@ export default function ChatPage() {
   return (
     <div className="flex flex-col h-full bg-slate-900">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800">
-        <h1 className="font-semibold text-white">
+      <div className="px-4 py-3 md:px-6 md:py-4 border-b border-slate-700 bg-slate-800 flex items-center gap-3">
+        <button onClick={toggleSidebar}
+          className="md:hidden p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors flex-shrink-0"
+          aria-label="Open sidebar">
+          <Menu className="w-5 h-5" />
+        </button>
+        <h1 className="font-semibold text-white truncate">
           {conversationId ? 'Conversation' : 'New Chat'}
         </h1>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+      <div className="flex-1 overflow-y-auto px-4 py-4 md:px-6 md:py-6 space-y-4 md:space-y-6 custom-scrollbar">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
-            <div className="w-16 h-16 bg-slate-700 rounded-2xl flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center min-h-[80%] h-full text-center space-y-4 px-4">
+            <div className="w-16 h-16 bg-slate-800 border border-slate-750 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/5">
               <Bot className="w-8 h-8 text-blue-400" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-white">Ask about your documents</h2>
-              <p className="text-slate-400 mt-1 text-sm">Upload documents and ask questions — I'll find the answers.</p>
+              <h2 className="text-xl font-bold text-white tracking-tight">Ask about your documents</h2>
+              <p className="text-slate-400 mt-1 text-sm max-w-sm mx-auto">Upload documents and ask questions — I'll find the answers.</p>
             </div>
-            <div className="grid grid-cols-2 gap-3 max-w-lg mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg mt-6">
               {['Summarize my latest document', 'What are the key findings?', 'Compare documents A and B', 'Find all mentions of...'].map(hint => (
                 <button key={hint} onClick={() => handleSend(hint)}
-                  className="text-left px-4 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-sm text-slate-300 transition-colors">
+                  className="text-left px-4 py-3 bg-slate-850 hover:bg-slate-800 border border-slate-750 hover:border-slate-700 rounded-xl text-sm text-slate-300 transition-all shadow-md hover:shadow-lg">
                   {hint}
                 </button>
               ))}
